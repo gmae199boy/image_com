@@ -2,62 +2,189 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"image"
-	"image/draw"
-	"image/jpeg"
-	"image/png"
-	"io/fs"
-	"io/ioutil"
-	"log"
-	"os"
+	"strconv"
 	"sync"
+	"time"
+
+	"image_com/src/assetReader"
+	"image_com/src/combine"
 )
 
 var (
-	w          = flag.Int("w", 1920, "width of image")
-	h          = flag.Int("h", 1080, "heigth of image")
-	imagePath  = flag.String("imagePath", "./", "image path")
-	definePath = flag.String("defieneString", "./", "define path")
+	w          = flag.Int("w", 1000, "width of image")
+	h          = flag.Int("h", 1000, "heigth of image")
+	imagePath  = flag.String("imagePath", "./image", "image path")
+	jsonPath = flag.String("jsonPath", "./random.json", "json path")
 )
 
 func main() {
 	flag.Parse()
+	
+	startTime := time.Now()
 
-	files, err := ioutil.ReadDir(*imagePath)
-	if err != nil {
-		log.Fatalln(err)
-	}
+	assetReader.JsonReader(*jsonPath)
+	
+	elapsedTime := time.Since(startTime)
+    fmt.Printf("json read 실행시간: %s\n", elapsedTime)
 
-	arr := make([]image.Image, len(files))
+	startTime = time.Now()
+	assetReader.ImageReader(*imagePath, assetReader.Images[0])
+	
+	elapsedTime = time.Since(startTime)
+    fmt.Printf("image read 실행시간: %s\n", elapsedTime)
 
+
+	// validate.Image()
+
+
+	startTime = time.Now()
 	var wg sync.WaitGroup
-
-	wg.Add(len(files))
-	for i, file := range files {
-		go func(li int, imageFile fs.FileInfo) {
+	wg.Add(2000)
+	for i := 0; i < 2000; i++ {
+		go func(idx int) {
 			defer wg.Done()
-			log.Println(imageFile.Name())
-			fileToImage, parseErr := os.Open(*imagePath + "/" + imageFile.Name())
-			if parseErr != nil {
-				log.Fatalln(parseErr)
-			}
-			defer fileToImage.Close()
-			log.Println(*fileToImage)
-			arr[li], err = png.Decode(fileToImage)
 
-		}(i, file)
+			combineOpt := &combine.CombineOptions{
+				W: *w,
+				H: *h,
+				Images: []*image.Image{
+					assetReader.Images[0][assetReader.Random[idx][0]], 
+					assetReader.Images[1][assetReader.Random[idx][1]],
+					assetReader.Images[2][assetReader.Random[idx][2]],
+					assetReader.Images[3][assetReader.Random[idx][3]],
+					assetReader.Images[4][assetReader.Random[idx][4]],
+					assetReader.Images[5][assetReader.Random[idx][5]],
+					assetReader.Images[6][assetReader.Random[idx][6]],
+				},
+				OutputPath: "./result",
+				SaveAs: combine.Png,
+				ImageName: strconv.Itoa(idx),
+			}
+			combine.Image(combineOpt)
+		}(i)
 	}
 	wg.Wait()
 
-	b := arr[0].Bounds()
-	image3 := image.NewRGBA(b)
-	draw.Draw(image3, b, arr[0], image.Point{}, draw.Src)
-	draw.Draw(image3, arr[1].Bounds(), arr[1], image.Point{}, draw.Over)
+	startTime = time.Now()
+	wg.Add(2000)
+	for i := 2000; i < 4000; i++ {
+		go func(idx int) {
+			defer wg.Done()
 
-	result, err := os.Create("result.jpg")
-	if err != nil {
-		log.Fatalf("failed to create: %s", err)
+			combineOpt := &combine.CombineOptions{
+				W: *w,
+				H: *h,
+				Images: []*image.Image{
+					assetReader.Images[0][assetReader.Random[idx][0]], 
+					assetReader.Images[1][assetReader.Random[idx][1]],
+					assetReader.Images[2][assetReader.Random[idx][2]],
+					assetReader.Images[3][assetReader.Random[idx][3]],
+					assetReader.Images[4][assetReader.Random[idx][4]],
+					assetReader.Images[5][assetReader.Random[idx][5]],
+					assetReader.Images[6][assetReader.Random[idx][6]],
+				},
+				OutputPath: "./result",
+				SaveAs: combine.Png,
+				ImageName: strconv.Itoa(idx),
+			}
+			combine.Image(combineOpt)
+		}(i)
 	}
-	jpeg.Encode(result, image3, &jpeg.Options{Quality: jpeg.DefaultQuality})
-	defer result.Close()
+	wg.Wait()
+
+	elapsedTime = time.Since(startTime)
+    fmt.Printf("이미지 조합 실행시간: %s\n", elapsedTime)
+
+	startTime = time.Now()
+	wg.Add(2000)
+	for i := 4000; i < 6000; i++ {
+		go func(idx int) {
+			defer wg.Done()
+
+			combineOpt := &combine.CombineOptions{
+				W: *w,
+				H: *h,
+				Images: []*image.Image{
+					assetReader.Images[0][assetReader.Random[idx][0]], 
+					assetReader.Images[1][assetReader.Random[idx][1]],
+					assetReader.Images[2][assetReader.Random[idx][2]],
+					assetReader.Images[3][assetReader.Random[idx][3]],
+					assetReader.Images[4][assetReader.Random[idx][4]],
+					assetReader.Images[5][assetReader.Random[idx][5]],
+					assetReader.Images[6][assetReader.Random[idx][6]],
+				},
+				OutputPath: "./result",
+				SaveAs: combine.Png,
+				ImageName: strconv.Itoa(idx),
+			}
+			combine.Image(combineOpt)
+		}(i)
+	}
+	wg.Wait()
+
+	elapsedTime = time.Since(startTime)
+    fmt.Printf("이미지 조합 실행시간: %s\n", elapsedTime)
+
+	startTime = time.Now()
+	wg.Add(2000)
+	for i := 6000; i < 8000; i++ {
+		go func(idx int) {
+			defer wg.Done()
+
+			combineOpt := &combine.CombineOptions{
+				W: *w,
+				H: *h,
+				Images: []*image.Image{
+					assetReader.Images[0][assetReader.Random[idx][0]], 
+					assetReader.Images[1][assetReader.Random[idx][1]],
+					assetReader.Images[2][assetReader.Random[idx][2]],
+					assetReader.Images[3][assetReader.Random[idx][3]],
+					assetReader.Images[4][assetReader.Random[idx][4]],
+					assetReader.Images[5][assetReader.Random[idx][5]],
+					assetReader.Images[6][assetReader.Random[idx][6]],
+				},
+				OutputPath: "./result",
+				SaveAs: combine.Png,
+				ImageName: strconv.Itoa(idx),
+			}
+			combine.Image(combineOpt)
+		}(i)
+	}
+	wg.Wait()
+
+	elapsedTime = time.Since(startTime)
+    fmt.Printf("이미지 조합 실행시간: %s\n", elapsedTime)
+
+	startTime = time.Now()
+	wg.Add(2500)
+	for i := 8000; i < 10500; i++ {
+		go func(idx int) {
+			defer wg.Done()
+
+			combineOpt := &combine.CombineOptions{
+				W: *w,
+				H: *h,
+				Images: []*image.Image{
+					assetReader.Images[0][assetReader.Random[idx][0]], 
+					assetReader.Images[1][assetReader.Random[idx][1]],
+					assetReader.Images[2][assetReader.Random[idx][2]],
+					assetReader.Images[3][assetReader.Random[idx][3]],
+					assetReader.Images[4][assetReader.Random[idx][4]],
+					assetReader.Images[5][assetReader.Random[idx][5]],
+					assetReader.Images[6][assetReader.Random[idx][6]],
+				},
+				OutputPath: "./result",
+				SaveAs: combine.Png,
+				ImageName: strconv.Itoa(idx),
+			}
+			combine.Image(combineOpt)
+		}(i)
+	}
+	wg.Wait()
+
+
+	elapsedTime = time.Since(startTime)
+    fmt.Printf("이미지 조합 실행시간: %s\n", elapsedTime)
 }
