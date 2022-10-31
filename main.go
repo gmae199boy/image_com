@@ -38,14 +38,14 @@ func main() {
 
 	// validate.Image()
 
-
+	mutex := &sync.Mutex{}
 	startTime = time.Now()
 	var wg sync.WaitGroup
 	wg.Add(2000)
 	for i := 0; i < 2000; i++ {
 		go func(idx int) {
 			defer wg.Done()
-
+			mutex.Lock()
 			combineOpt := &combine.CombineOptions{
 				W: *w,
 				H: *h,
@@ -62,17 +62,21 @@ func main() {
 				SaveAs: combine.Png,
 				ImageName: strconv.Itoa(idx),
 			}
+			mutex.Unlock()
 			combine.Image(combineOpt)
 		}(i)
 	}
 	wg.Wait()
+
+	elapsedTime = time.Since(startTime)
+    fmt.Printf("이미지 조합 실행시간: %s\n", elapsedTime)
 
 	startTime = time.Now()
 	wg.Add(2000)
 	for i := 2000; i < 4000; i++ {
 		go func(idx int) {
 			defer wg.Done()
-
+			mutex.Lock()
 			combineOpt := &combine.CombineOptions{
 				W: *w,
 				H: *h,
@@ -89,6 +93,7 @@ func main() {
 				SaveAs: combine.Png,
 				ImageName: strconv.Itoa(idx),
 			}
+			mutex.Unlock()
 			combine.Image(combineOpt)
 		}(i)
 	}
@@ -102,7 +107,7 @@ func main() {
 	for i := 4000; i < 6000; i++ {
 		go func(idx int) {
 			defer wg.Done()
-
+			mutex.Lock()
 			combineOpt := &combine.CombineOptions{
 				W: *w,
 				H: *h,
@@ -119,6 +124,7 @@ func main() {
 				SaveAs: combine.Png,
 				ImageName: strconv.Itoa(idx),
 			}
+			mutex.Unlock()
 			combine.Image(combineOpt)
 		}(i)
 	}
@@ -132,7 +138,7 @@ func main() {
 	for i := 6000; i < 8000; i++ {
 		go func(idx int) {
 			defer wg.Done()
-
+			mutex.Lock()
 			combineOpt := &combine.CombineOptions{
 				W: *w,
 				H: *h,
@@ -149,6 +155,7 @@ func main() {
 				SaveAs: combine.Png,
 				ImageName: strconv.Itoa(idx),
 			}
+			mutex.Unlock()
 			combine.Image(combineOpt)
 		}(i)
 	}
@@ -162,7 +169,7 @@ func main() {
 	for i := 8000; i < 10500; i++ {
 		go func(idx int) {
 			defer wg.Done()
-
+			mutex.Lock()
 			combineOpt := &combine.CombineOptions{
 				W: *w,
 				H: *h,
@@ -179,6 +186,7 @@ func main() {
 				SaveAs: combine.Png,
 				ImageName: strconv.Itoa(idx),
 			}
+			mutex.Unlock()
 			combine.Image(combineOpt)
 		}(i)
 	}

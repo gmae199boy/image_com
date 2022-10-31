@@ -1,4 +1,4 @@
-// package validate
+package validate
 
 // import (
 // 	"fmt"
@@ -83,4 +83,3 @@
 // // 	elapsedTime := time.Since(startTime)
 // //     fmt.Printf("실행시간: %s\n", elapsedTime)
 // // }
-package validate

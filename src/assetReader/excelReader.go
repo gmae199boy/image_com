@@ -1,4 +1,4 @@
-// package assetReader
+package assetReader
 
 // import (
 // 	"fmt"
@@ -46,4 +46,3 @@
 //	    //     fmt.Println()
 //	    // }
 //	}
-package assetReader

@@ -12,7 +12,7 @@ import (
 )
 
 var (
-	Images []map[string]*image.Image = make([]map[string]*image.Image, 7)
+	Images []map[string]*image.Image = make([]map[string]*image.Image, 8)
 )
 
 // Read() -imagePath 변수에 설정한 모든 이미지를 로딩
